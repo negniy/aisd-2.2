@@ -23,6 +23,14 @@ size_t lcg() {
 	return x;
 }
 
+void revers_vector(vector<int>& v, int size) {
+	for (int i = 0; i < size / 2; i++) {
+		int tmp = v[i];
+		v[i] = v[(size - 1) - i];
+		v[(size - 1) - i] = tmp;
+	}
+}
+
 stats selection_sort(vector<int>& v, int size) {
 	stats s;
 	for (int i = 0; i < size-1; i++) {
@@ -168,6 +176,42 @@ void sorted_v(int n) {
 
 void rev_sorted_v(int n) {
 
+	vector<int> v;
+	stats sel;
+	stats sh;
+
+	for (int i = 0; i < n; i++) {
+		int key = int(lcg());
+		v.push_back(key);
+	}
+	/*
+	for (int i = 0; i < n; i++) {
+		cout << v[i] << endl;
+	}
+
+	cout << "//////////////////////////"<< endl;
+	*/
+	stats s1 = selection_sort(v, n);
+	/*
+	for (int i = 0; i < n; i++) {
+		cout<< v[i]<< endl;
+	}
+	*/
+	revers_vector(v, n);
+	/*
+	cout << "//////////////////////////" << endl;
+	for (int i = 0; i < n; i++) {
+		cout<< v[i]<< endl;
+	}
+	*/
+	sel = selection_sort(v, n);
+
+	revers_vector(v, n);
+	sh = shaker_sort(v, n);
+
+	cout << " ол-во сравнений в сортировке выбором: " << sel.comparison_count << "  ол-во копирований в сортировке выбором: " << sel.copy_count << endl;
+	cout << " ол-во сравнений в сортировке выбором: " << sh.comparison_count << "  ол-во копирований в сортировке выбором: " << sh.copy_count << endl;
+
 }
 
 void time_of_sort(int n) {
@@ -180,7 +224,7 @@ int main() {
 	SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "RUS");
 
-	int n = 10;
+	int n = 11;
 
 	while (true) {
 
