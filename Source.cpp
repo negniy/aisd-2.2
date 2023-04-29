@@ -139,6 +139,31 @@ void random_v(int n) {
 
 void sorted_v(int n) {
 
+	vector<int> v;
+	stats sel;
+	stats sh;
+
+	for (int i = 0; i < n; i++) {
+		int key = int(lcg());
+		v.push_back(key);
+	}
+
+	/*for (int i = 0; i < n; i++) {
+		cout << v[i] << endl;
+	}
+
+	cout << "//////////////////////////"<< endl;
+	*/
+	stats s1 = selection_sort(v, n);
+	/*
+	for (int i = 0; i < n; i++) {
+		cout<< v[i]<< endl;
+	}
+	*/
+	sel = selection_sort(v, n);
+	sh = shaker_sort(v, n);
+	cout << " ол-во сравнений в сортировке выбором: " << sel.comparison_count << "  ол-во копирований в сортировке выбором: " << sel.copy_count << endl;
+	cout << " ол-во сравнений в сортировке выбором: " << sh.comparison_count << "  ол-во копирований в сортировке выбором: " << sh.copy_count << endl;
 }
 
 void rev_sorted_v(int n) {
@@ -177,12 +202,15 @@ int main() {
 			break;
 		case 50:
 			sorted_v(n);
+			get_key();
 			break;
 		case 51:
 			rev_sorted_v(n);
+			get_key();
 			break;
 		case 52:
-			time_of_sort(n);
+			time_of_sort(n); 
+			get_key();
 			break;
 		case 27:
 			return 0;
