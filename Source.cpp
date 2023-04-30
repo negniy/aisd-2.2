@@ -93,7 +93,7 @@ void random_v(int n) {
 	stats sum_sel;
 	stats sum_sh;
 
-	for (int a = 0; a < 100; a++) {
+	/*for (int a = 0; a < 100; a++) {
 
 		for (int i = 0; i < n; i++) {
 			int key = int(lcg());
@@ -105,22 +105,22 @@ void random_v(int n) {
 		}
 
 		cout << "//////////////////////////"<< endl;
-		*/
+		
 		stats s1 = selection_sort(v, n);
 		/*
 		for (int i = 0; i < n; i++) {
 			cout<< v[i]<< endl;
 		}
-		*/
+		
 		sum_sel.comparison_count += s1.comparison_count;
 		sum_sel.copy_count += s1.copy_count;
 		v.clear();
 	}
 	cout << "Кол-во сравнений в сортировке выбором: " << sum_sel.comparison_count/100 << " Кол-во копирований в сортировке выбором: " << sum_sel.copy_count/100 << endl;
-
+	*/
 
 	for (int a = 0; a < 100; a++) {
-
+		cout << ".";
 		for (int i = 0; i < n; i++) {
 			int key = int(lcg());
 			v.push_back(key);
@@ -171,7 +171,7 @@ void sorted_v(int n) {
 	sel = selection_sort(v, n);
 	sh = shaker_sort(v, n);
 	cout << "Кол-во сравнений в сортировке выбором: " << sel.comparison_count << " Кол-во копирований в сортировке выбором: " << sel.copy_count << endl;
-	cout << "Кол-во сравнений в сортировке выбором: " << sh.comparison_count << " Кол-во копирований в сортировке выбором: " << sh.copy_count << endl;
+	cout << "Кол-во сравнений в сортировке шейкером: " << sh.comparison_count << " Кол-во копирований в сортировке шейкером: " << sh.copy_count << endl;
 }
 
 void rev_sorted_v(int n) {
@@ -210,7 +210,7 @@ void rev_sorted_v(int n) {
 	sh = shaker_sort(v, n);
 
 	cout << "Кол-во сравнений в сортировке выбором: " << sel.comparison_count << " Кол-во копирований в сортировке выбором: " << sel.copy_count << endl;
-	cout << "Кол-во сравнений в сортировке выбором: " << sh.comparison_count << " Кол-во копирований в сортировке выбором: " << sh.copy_count << endl;
+	cout << "Кол-во сравнений в сортировке шейкером: " << sh.comparison_count << " Кол-во копирований в сортировке шейкером: " << sh.copy_count << endl;
 
 }
 
@@ -224,7 +224,7 @@ int main() {
 	SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "RUS");
 
-	int n = 11;
+	int n = 50000;
 
 	while (true) {
 
