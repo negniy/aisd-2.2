@@ -9,6 +9,8 @@
 #include <time.h>
 #include <iostream>
 #include <vector>
+#include <chrono>
+
 using namespace std;
 
 
@@ -93,7 +95,7 @@ void random_v(int n) {
 	stats sum_sel;
 	stats sum_sh;
 
-	/*for (int a = 0; a < 100; a++) {
+	for (int a = 0; a < 100; a++) {
 
 		for (int i = 0; i < n; i++) {
 			int key = int(lcg());
@@ -102,43 +104,32 @@ void random_v(int n) {
 
 		/*for (int i = 0; i < n; i++) {
 			cout << v[i] << endl;
-		}
+		}*/
 
-		cout << "//////////////////////////"<< endl;
+		//cout << "//////////////////////////"<< endl;
 		
 		stats s1 = selection_sort(v, n);
-		/*
-		for (int i = 0; i < n; i++) {
+		
+		/*for (int i = 0; i < n; i++) {
 			cout<< v[i]<< endl;
-		}
+		}*/
 		
 		sum_sel.comparison_count += s1.comparison_count;
 		sum_sel.copy_count += s1.copy_count;
 		v.clear();
 	}
 	cout << "Кол-во сравнений в сортировке выбором: " << sum_sel.comparison_count/100 << " Кол-во копирований в сортировке выбором: " << sum_sel.copy_count/100 << endl;
-	*/
+	
 
 	for (int a = 0; a < 100; a++) {
-		cout << ".";
+		
 		for (int i = 0; i < n; i++) {
 			int key = int(lcg());
 			v.push_back(key);
 		}
-
-		/*for (int i = 0; i < n; i++) {
-			cout << v[i] << endl;
-		}
-
-		cout << "//////////////////////////" << endl;
-		*/
+		
 		stats s2 = shaker_sort(v, n);
 
-		/*for (int i = 0; i < n; i++) {
-			cout << v[i] << endl;
-		}*/
-		sum_sh.comparison_count += s2.comparison_count;
-		sum_sh.copy_count += s2.copy_count;
 		v.clear();
 	}
 
@@ -214,8 +205,94 @@ void rev_sorted_v(int n) {
 
 }
 
-void time_of_sort(int n) {
+void time_of_selection() {
+	int n = 100;
 
+	for (int i = 0; i < 8; i++) {
+
+		float times = 0;
+
+		for (int j = 0; j < 100; j++) {
+
+			vector<int> v;
+
+			for (int k = 0; k < n; k++) {
+				int key = int(lcg());
+				v.push_back(key);
+			}
+
+			auto start = chrono::high_resolution_clock::now();
+			shaker_sort(v, n);
+			auto end = chrono::high_resolution_clock::now();
+			chrono::duration<float> time = end - start;
+			times += time.count();
+
+			v.clear();
+		}
+
+		cout << "Кол-во эл-тов массива в сортировке шейкером: " << n << " Время сортировки: " << times / 100 << endl;
+		n = n * 2;
+	}
+
+}
+
+void time_of_shaker() {
+
+	int n = 100;
+
+	for (int i = 0; i < 8; i++) {
+
+		float times = 0;
+
+		for (int j = 0; j < 100; j++) {
+
+			vector<int> v;
+
+			for (int k = 0; k < n; k++) {
+				int key = int(lcg());
+				v.push_back(key);
+			}
+
+			auto start = chrono::high_resolution_clock::now();
+			selection_sort(v, n);
+			auto end = chrono::high_resolution_clock::now();
+			chrono::duration<float> time = end - start;
+			times += time.count();
+
+			v.clear();
+		}
+
+		cout << "Кол-во эл-тов массива в сортировке шейкером: " << n << " Время сортировки: " << times / 100 << endl;
+		n = n * 2;
+	}
+
+}
+
+void time_of_sort() {
+	while (true) {
+
+		system("cls");
+		std::cout << "Меню:\n";
+		std::cout << "[1] - Время сортировки выбором\n";
+		std::cout << "[2] - Время сортировки шейкером\n";
+		std::cout << "[ESC] - Выход\n";
+		int m = get_key();
+
+		switch (m)
+		{
+		case 49:
+			time_of_selection();
+			get_key();
+			break;
+		case 50:
+			time_of_shaker();
+			get_key();
+			break;
+		case 27:
+			return;
+			break;
+		}
+	}
 }
 
 int main() {
@@ -253,7 +330,7 @@ int main() {
 			get_key();
 			break;
 		case 52:
-			time_of_sort(n); 
+			time_of_sort(); 
 			get_key();
 			break;
 		case 27:
