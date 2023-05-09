@@ -33,6 +33,46 @@ void revers_vector(vector<int>& v, int size) {
 	}
 }
 
+stats comb_sort(vector<int>& v, int size) {
+	stats s;
+
+	double fakt = 1.2473309; // фактор уменьшения
+	int step = size - 1;
+
+	while (step >= 1)
+	{
+		for (int i = 0; i + step < size; ++i)
+		{
+			if (v[i] > v[i + step])
+			{
+				swap(v[i], v[i + step]);
+				s.copy_count++;
+			}
+			s.comparison_count++;
+		}
+		step = step / fakt;
+	}
+	// сортировка пузырьком
+	for (int i = 0; i < size - 1; i++)
+	{
+		bool swapped = false;
+		for (int j = 0; j < size - i - 1; j++)
+		{
+			if (v[j] > v[j + 1]) {
+				swap(v[j], v[j + 1]);
+				swapped = true;
+				s.copy_count++;
+			}
+			s.comparison_count++;
+		}
+
+		if (!swapped)
+			break;
+	}
+	return s;
+
+}
+
 stats selection_sort(vector<int>& v, int size) {
 	stats s;
 	for (int i = 0; i < size-1; i++) {
@@ -94,6 +134,7 @@ void random_v(int n) {
 	vector<int> v;
 	stats sum_sel;
 	stats sum_sh;
+	stats sum_c;
 
 	for (int a = 0; a < 100; a++) {
 
@@ -118,9 +159,9 @@ void random_v(int n) {
 		sum_sel.copy_count += s1.copy_count;
 		v.clear();
 	}
+
 	cout << "Кол-во сравнений в сортировке выбором: " << sum_sel.comparison_count/100 << " Кол-во копирований в сортировке выбором: " << sum_sel.copy_count/100 << endl;
 	
-
 	for (int a = 0; a < 100; a++) {
 		
 		for (int i = 0; i < n; i++) {
@@ -129,11 +170,36 @@ void random_v(int n) {
 		}
 		
 		stats s2 = shaker_sort(v, n);
-
+		sum_sh.comparison_count += s2.comparison_count;
+		sum_sh.copy_count += s2.copy_count;
 		v.clear();
 	}
 
 	cout << "Кол-во сравнений в сортировке шейкером: " << sum_sh.comparison_count/100 << " Кол-во копирований в сортировке шейкером: " << sum_sh.copy_count/100 << endl;
+
+	for (int a = 0; a < 100; a++) {
+
+		for (int i = 0; i < n; i++) {
+			int key = int(lcg());
+			v.push_back(key);
+		}
+		/*for (int i = 0; i < n; i++) {
+			cout << v[i] << endl;
+		}*/
+
+		//cout << "//////////////////////////"<< endl;
+		stats s3 = comb_sort(v, n);
+
+		/*for (int i = 0; i < n; i++) {
+			cout<< v[i]<< endl;
+		}*/
+
+		sum_c.comparison_count += s3.comparison_count;
+		sum_c.copy_count += s3.copy_count;
+		v.clear();
+	}
+
+	cout << "Кол-во сравнений в сортировке расческой: " << sum_c.comparison_count / 100 << " Кол-во копирований в сортировке расческой: " << sum_c.copy_count / 100 << endl;
 }
 
 void sorted_v(int n) {
@@ -141,6 +207,7 @@ void sorted_v(int n) {
 	vector<int> v;
 	stats sel;
 	stats sh;
+	stats c;
 
 	for (int i = 0; i < n; i++) {
 		int key = int(lcg());
@@ -153,7 +220,7 @@ void sorted_v(int n) {
 
 	cout << "//////////////////////////"<< endl;
 	*/
-	stats s1 = selection_sort(v, n);
+	selection_sort(v, n);
 	/*
 	for (int i = 0; i < n; i++) {
 		cout<< v[i]<< endl;
@@ -161,8 +228,11 @@ void sorted_v(int n) {
 	*/
 	sel = selection_sort(v, n);
 	sh = shaker_sort(v, n);
-	cout << "Кол-во сравнений в сортировке выбором: " << sel.comparison_count << " Кол-во копирований в сортировке выбором: " << sel.copy_count << endl;
-	cout << "Кол-во сравнений в сортировке шейкером: " << sh.comparison_count << " Кол-во копирований в сортировке шейкером: " << sh.copy_count << endl;
+	c = comb_sort(v, n);
+
+	cout << "кол-во сравнений в сортировке выбором: " << sel.comparison_count << " кол-во копирований в сортировке выбором: " << sel.copy_count << endl;
+	cout << "кол-во сравнений в сортировке шейкером: " << sh.comparison_count << " кол-во копирований в сортировке шейкером: " << sh.copy_count << endl;
+	cout << "Кол-во сравнений в сортировке расческой: " << c.comparison_count  << " Кол-во копирований в сортировке расческой: " << c.copy_count << endl;
 }
 
 void rev_sorted_v(int n) {
@@ -170,6 +240,7 @@ void rev_sorted_v(int n) {
 	vector<int> v;
 	stats sel;
 	stats sh;
+	stats c;
 
 	for (int i = 0; i < n; i++) {
 		int key = int(lcg());
@@ -200,9 +271,12 @@ void rev_sorted_v(int n) {
 	revers_vector(v, n);
 	sh = shaker_sort(v, n);
 
+	revers_vector(v, n);
+	c = comb_sort(v, n);
+
 	cout << "Кол-во сравнений в сортировке выбором: " << sel.comparison_count << " Кол-во копирований в сортировке выбором: " << sel.copy_count << endl;
 	cout << "Кол-во сравнений в сортировке шейкером: " << sh.comparison_count << " Кол-во копирований в сортировке шейкером: " << sh.copy_count << endl;
-
+	cout << "Кол-во сравнений в сортировке расческой: " << c.comparison_count << " Кол-во копирований в сортировке расческой: " << c.copy_count << endl;
 }
 
 void time_of_selection() {
@@ -268,6 +342,37 @@ void time_of_shaker() {
 
 }
 
+void time_of_comb() {
+	int n = 100;
+
+	for (int i = 0; i < 8; i++) {
+
+		float times = 0;
+
+		for (int j = 0; j < 100; j++) {
+
+			vector<int> v;
+
+			for (int k = 0; k < n; k++) {
+				int key = int(lcg());
+				v.push_back(key);
+			}
+
+			auto start = chrono::high_resolution_clock::now();
+			comb_sort(v, n);
+			auto end = chrono::high_resolution_clock::now();
+			chrono::duration<float> time = end - start;
+			times += time.count();
+
+			v.clear();
+		}
+
+		cout << "Кол-во эл-тов массива в сортировке расческой: " << n << " Время сортировки: " << times / 100 << endl;
+		n = n * 2;
+	}
+
+}
+
 void time_of_sort() {
 	while (true) {
 
@@ -275,6 +380,7 @@ void time_of_sort() {
 		std::cout << "Меню:\n";
 		std::cout << "[1] - Время сортировки выбором\n";
 		std::cout << "[2] - Время сортировки шейкером\n";
+		std::cout << "[3] - Время сортировки расческой\n";
 		std::cout << "[ESC] - Выход\n";
 		int m = get_key();
 
@@ -286,6 +392,10 @@ void time_of_sort() {
 			break;
 		case 50:
 			time_of_shaker();
+			get_key();
+			break;
+		case 51:
+			time_of_comb();
 			get_key();
 			break;
 		case 27:
@@ -301,15 +411,15 @@ int main() {
 	SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "RUS");
 
-	int n = 50000;
+	int n = 100000;
 
 	while (true) {
 
 		system("cls");
 		std::cout << "Меню:\n";
-		std::cout << "[1] - Сортировка случайно сгенерированный массив\n";
-		std::cout << "[2] - Сортировка отсортированный массив массив\n";
-		std::cout << "[3] - Сортировка обратно отсортированный массив массив\n";
+		std::cout << "[1] - Сортировка случайно сгенерированного массива\n";
+		std::cout << "[2] - Сортировка отсортированного массива\n";
+		std::cout << "[3] - Сортировка обратно отсортированного массива\n";
 		std::cout << "[4] - Время сортировки\n";
 		std::cout << "[ESC] - Выход\n";
 
