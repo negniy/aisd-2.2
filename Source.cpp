@@ -411,7 +411,7 @@ int main() {
 	SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "RUS");
 
-	int n = 100000;
+	int n = 10000;
 
 	while (true) {
 
